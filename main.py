@@ -87,3 +87,9 @@ async def get_catalog(type: str, id: str, response: Response):
     except Exception as e:
         logger.error(f"Error fetching catalog for {type}/{id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)
