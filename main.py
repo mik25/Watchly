@@ -2,18 +2,19 @@ from fastapi import FastAPI, HTTPException
 from loguru import logger
 from app.services.tmdb_service import TMDBService
 from app.services.recommendation_service import RecommendationService
-
-# Configure loguru
-import os
-
-os.makedirs("logs", exist_ok=True)
-logger.add("logs/watchly_{time}.log", rotation="10 MB", retention="7 days", level="INFO")
-logger.add(lambda msg: print(msg, end=""), level="INFO", colorize=True)
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Watchly", description="Stremio catalog addon for movie and series recommendations", version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Initialize services
 tmdb_service = TMDBService()
 recommendation_service = RecommendationService()
