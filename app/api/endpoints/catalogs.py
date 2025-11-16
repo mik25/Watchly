@@ -49,24 +49,16 @@ async def get_catalog(
             logger.info(f"Found {len(recommendations)} recommendations for {id}")
         else:
             # Get recommendations based on library
-            # Use last 10 items from library, get 5 recommendations per item
+            # Use last 10 loved items as sources, get 5 recommendations per source item
             recommendations = await recommendation_service.get_recommendations(
-                content_type=type, seed_limit=10, per_seed_limit=5, max_results=50
+                content_type=type, source_items_limit=10, recommendations_per_source=5, max_results=50
             )
             logger.info(f"Found {len(recommendations)} recommendations for {type}")
 
-        # Recommendations already contain full metadata in Stremio format
-        # Extract meta from each recommendation
-        metas = []
-        for rec in recommendations:
-            # rec is already the full addon meta response with 'meta' key
-            if rec and rec.get("meta"):
-                metas.append(rec["meta"])
-
-        logger.info(f"Returning {len(metas)} items for {type}")
+        logger.info(f"Returning {len(recommendations)} items for {type}")
         # Cache catalog responses for 1 day (86400 seconds)
         response.headers["Cache-Control"] = "public, max-age=86400"
-        return {"metas": metas}
+        return {"metas": recommendations}
 
     except HTTPException:
         raise
