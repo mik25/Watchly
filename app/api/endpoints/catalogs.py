@@ -90,6 +90,8 @@ async def update_catalogs(encoded: str):
     genre_based_catalogs = await dynamic_catalog_service.get_genre_based_catalogs(library_items=library_items)
     catalogs += genre_based_catalogs
     # update catalogs
+
+    logger.info(f"Updating Catalogs: {catalogs}")
     auth_key = await stremio_service._get_auth_token()
     updated = await stremio_service.update_catalogs(catalogs, auth_key)
     logger.info(f"Updated catalogs: {updated}")
