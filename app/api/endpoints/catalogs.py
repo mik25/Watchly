@@ -93,7 +93,6 @@ async def update_catalogs(encoded: str):
     watched_items = library_items.get("watched", [])
     # now find first few items
     for l_item in loved_items:
-        print(l_item)
         type_ = l_item.get("type")
         if type_ in ["tv"]:
             type_ = "series"
@@ -110,7 +109,7 @@ async def update_catalogs(encoded: str):
             }
         )
     for w_item in watched_items:
-        type_ = l_item.get("type")
+        type_ = w_item.get("type")
         if type_ in ["tv"]:
             type_ = "series"
 
