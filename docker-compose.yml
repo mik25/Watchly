@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  watchly:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: watchly
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - PORT=${PORT:-8000}
+      - ADDON_ID=${ADDON_ID:-com.bimal.watchly}
+    env_file:
+      - .env
+    volumes:
+      - ./static:/app/static:ro
+    networks:
+      - watchly-network
+
+networks:
+  watchly-network:
+    driver: bridge
